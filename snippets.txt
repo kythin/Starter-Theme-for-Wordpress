@@ -1,0 +1,40 @@
+Self Promo:
+-----------
+I highly reccommend installing Wordspinner (plugin) as it will then allow you to run randomizers over text using the code: run_spinner($text). This greatly speeds up the randomising of static groups of elements such as ads or other images. Also, do me a favour and give it a good rating while you're there please :D
+
+http://wordpress.org/extend/plugins/wordspinner/
+
+
+
+Useful Snippets
+---------------
+
+
+Output the URL path to the template that is loaded. Very useful for setting image src attributes directly in themes.
+<?=get_bloginfo('template_directory')?>
+
+
+
+
+Check if you're on the front page:
+if (is_front_page()) {}
+
+
+
+
+WP Standard for including a menu position (needs to also be defined in functions.php, and referenced by the same name). In this example, you can also set what is displayed when there are no widgets.
+
+<?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar('main-menu') ) : else : ?>
+<?php endif; ?>
+
+
+
+
+
+
+REALLY SIMPLE SEARCH BOX TEMPLATE:
+
+<form name="searchform" action="/search/" method="get">
+	<input type="text" class="searchbox" value="<?php if ($_GET['s']) {echo($_GET['s']);} else {echo("Search this site");}?>" name="s" onfocus="if(this.value=='Search this site')this.value='';" onblur="if(this.value=='')this.value='Search this site';" />
+	<input type="image" src="<?=get_bloginfo('template_directory')?>/images/search-submit.png" />
+</form>
