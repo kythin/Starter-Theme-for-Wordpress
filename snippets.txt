@@ -17,7 +17,7 @@ Output the URL path to the template that is loaded. Very useful for setting imag
 
 
 Check if you're on the front page:
-if (is_front_page()) {}
+if (is_home() || is_front_page()) {}
 
 
 

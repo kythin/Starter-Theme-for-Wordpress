@@ -15,21 +15,12 @@
 	?>
 
 	<script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-    <script language="javascript" src="<?=get_bloginfo('template_directory')?>/js/jquery.preloader.js"></script>
     <script language="javascript" src="<?=get_bloginfo('template_directory')?>/js/custom.js"></script>
     
     <script type="text/javascript" language="javascript">
 	$(document).ready(function() {
 		
-		$.preLoadImages(
-			 [
-				  '<?=get_bloginfo('template_directory')?>/images/logo_black_248px.jpg',
-				  '<?=get_bloginfo('template_directory')?>/SOURCE/logo.jpg'
-				  
-			 ],function(){
-				  //alert('All Passed Images Loaded');
-			 }
-		);
+
 		
 		
 	});
