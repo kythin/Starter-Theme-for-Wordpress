@@ -53,6 +53,18 @@ JQuery fade effect - really nice polish for website designs that don't have hove
 
 
 
+
+Set the length of excerpts (add to functions.php)
+
+add_filter('excerpt_length', 'my_excerpt_length');
+function my_excerpt_length($len) { return 75; }
+
+
+
+
+
+
+
 REALLY SIMPLE SEARCH BOX TEMPLATE:
 
 <form name="searchform" action="/search/" method="get">

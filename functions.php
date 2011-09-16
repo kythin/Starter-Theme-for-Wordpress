@@ -1,20 +1,26 @@
 <?php
 define('GOOGLE_ANALYTICS', '');
-define('THIS_THEME_STUB', 'twentyten'); //usually the name of the folder the theme resides in, try to avoid spaces or upper case characters.
+
+
+
+
 
 
 
 // to prevent  WP < 2.9 breaking. Also enables Feature Images.
 if (function_exists('add_theme_support')) {
 	add_theme_support( 'post-thumbnails' );
+	set_post_thumbnail_size( 200, 200, true ); // Normal post thumbnails
+	add_image_size( 'hero', 500, 9999 ); //New definition of a thumbnail size.
 }
+
 
 
 function mytheme_widgets_init() {
 	
 	// Define some menus, as many as you like.
 	register_nav_menus( array(
-		'primary' => __( 'Primary Navigation', THIS_THEME_STUB ),
+		'primary' => __( 'Primary Navigation' ),
 	) );
 	
 	
