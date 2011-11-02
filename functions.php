@@ -12,6 +12,7 @@ if (function_exists('add_theme_support')) {
 	add_theme_support( 'post-thumbnails' );
 	set_post_thumbnail_size( 200, 200, true ); // Normal post thumbnails
 	add_image_size( 'hero', 500, 9999 ); //New definition of a thumbnail size.
+	add_image_size( 'admin-thumb', 100, 9999 ); //New definition of a thumbnail size.
 }
 
 
@@ -121,6 +122,25 @@ function getCurrentCatID(){
   	}
 	
   	return $cat_ID;
+}
+
+
+
+// THUMBNAILS TO ADMIN POST VIEW
+// from http://voodoopress.com/2011/03/display-a-thumbnail-in-your-admin-panel-post-list/
+
+add_filter('manage_posts_columns', 'posts_columns', 5);
+add_action('manage_posts_custom_column', 'posts_custom_columns', 5, 2);
+
+function posts_columns($defaults){
+    $defaults['voodoo_post_thumbs'] = __('Thumbs');
+    return $defaults;
+}
+
+function posts_custom_columns($column_name, $id){
+	if($column_name === 'voodoo_post_thumbs'){
+        echo the_post_thumbnail( 'admin-thumb' );
+    }
 }
 
 ?>

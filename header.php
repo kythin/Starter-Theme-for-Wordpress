@@ -33,4 +33,11 @@
     
     <div id="sitewrapper">
     
+    
+    <?php // example menu place definition ?>
     <?php wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary' )); ?>
+	
+    
+    <?php // example widget place definition ?>
+    <?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar('sidebar') ) : else : ?>
+	<?php endif; ?>
