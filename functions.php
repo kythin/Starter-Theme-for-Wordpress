@@ -1,6 +1,6 @@
 <?php
 define('GOOGLE_ANALYTICS', '');
-
+include_once('functions-admin.php');
 
 
 
