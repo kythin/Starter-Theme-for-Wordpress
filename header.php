@@ -14,7 +14,7 @@
 	
 	?>
 
-	<script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+	<script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script language="javascript" src="<?=get_bloginfo('template_directory')?>/js/custom.js"></script>
     
     <script type="text/javascript" language="javascript">
