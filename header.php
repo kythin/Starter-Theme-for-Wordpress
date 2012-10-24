@@ -14,42 +14,76 @@
 	<?php
 
 	global $page, $paged;
-	mytemplate_head(); //includes the title, analytics
+	mytheme_head(); //includes the title, analytics
 	
 	?>
-
-	<script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script language="javascript" src="<?=get_bloginfo('template_directory')?>/js/custom.js"></script>
-    
-    <script type="text/javascript" language="javascript">
-	$(document).ready(function() {
-		
-
-		
-		
-	});
-		
-	
-	</script>
+		<script>
+        var tempdir = '<?=get_bloginfo('template_directory')?>';
+        </script>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="<?=get_bloginfo('template_directory')?>/js/bootstrap.min.js"></script>
+		<script src="<?=get_bloginfo('template_directory')?>/js/jquery.cycle.js"></script>
+        <script src="<?=get_bloginfo('template_directory')?>/js/custom.js?t=<?=mktime()?>"></script>
+        <script src="<?=get_bloginfo('template_directory')?>/js/fancybox/jquery.fancybox.js"></script>
+        
+        
+        <!-- Add fancyBox - thumbnail helper -->
+        <link rel="stylesheet" type="text/css" href="<?=get_bloginfo('template_directory')?>/js/fancybox/helpers/jquery.fancybox-thumbs.css?v=2.1.2" />
+        <script type="text/javascript" src="<?=get_bloginfo('template_directory')?>/js/fancybox/helpers/jquery.fancybox-thumbs.js?v=2.1.2"></script>
+        <!-- Add fancyBox - media helper -->
+        <script type="text/javascript" src="<?=get_bloginfo('template_directory')?>/js/fancybox/helpers/jquery.fancybox-media.js?v=1.0.0"></script>
+        
+        
+        <link href="<?=get_bloginfo('template_directory')?>/js/fancybox/jquery.fancybox.css" rel="stylesheet" />
+        <link href="<?=get_bloginfo('template_directory')?>/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>" />
 	
 	<?php 
+	
 	//Get the theme options
 	global $options;
 	foreach ($options as $value) {
-		if (get_settings( $value['id'] ) === FALSE) { $$value['id'] = $value['std']; } else { $$value['id'] = get_settings( $value['id'] ); }
+		
+		if (get_settings( $value['id'] ) === FALSE) { 
+			define($value['id'],$value['std']);
+		} else { 
+			define($value['id'],get_settings( $value['id'] )); 
+		}
 	} 
 	?>
+	
+
+
+
+
     
 </head>
 <body <?php body_class(); ?>>
     
-    <div id="sitewrapper">
+    <div id="sitewrapper" class="container">
     
     
     <?php // example menu place definition ?>
-    <?php wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary' )); ?>
-	
+    <div class="row">
+    	<div class="span12">
+			<?php wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary' )); ?>
+		</div>
+    </div>
     
-    <?php // example widget place definition ?>
-    <?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar('sidebar') ) : else : ?>
-	<?php endif; ?>
+    <div class="row">
+        <div class="span12">
+            <?php // example widget place definition ?>
+            <?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar('sidebar') ) : else : ?>
+                If nothing in this sidebar, show some text.
+            <?php endif; ?>
+        </div>
+    </div>
+    
+    
+    <div class="row">
+    	<div class="span12">
+        	<!-- Example of admin variable -->
+            <?=yourtheme_welcome_message?>
+        </div>
+    </div>
+    

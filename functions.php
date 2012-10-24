@@ -1,6 +1,9 @@
 <?php
-define('GOOGLE_ANALYTICS', '');
+define('GOOGLE_ANALYTICS', ''); //if you want to put your GA code in here, it will insert google analytics in the header. Leave blank to disable.
+
 include_once('functions-admin.php');
+
+include_once('widgets/example_widget.php');
 
 
 
@@ -49,7 +52,7 @@ add_action( 'widgets_init', 'mytheme_widgets_init' );
 
 
 
-function mytemplate_head() {
+function mytheme_head() {
 	global $page, $paged, $nofollow;
 	
 	//First the TITLE tag;

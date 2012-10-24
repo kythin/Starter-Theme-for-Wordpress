@@ -2,11 +2,18 @@
 /*
 Big thanks to this post for most of this code!
 http://blog.themeforest.net/wordpress/create-an-options-page-for-your-wordpress-theme/
+
+These will be made into constants of the format:
+
+yourtheme_welcome_message
+
 */
 
 
 $themename = "Your Theme";
 $shortname = "yourtheme";
+
+
 $options = array (
 array(    "name" => "Welcome Message",
         	"type" => "title"),
@@ -22,6 +29,7 @@ array(  "name" => "Title",
 array(  "name" => "Message",
         "desc" => "Text to display as welcome message.",
         "id" => $shortname."_welcome_message",
+		"std" => "Some standard text here",
         "type" => "textarea"),
 
 array(  "name" => "Disable Welcome Message?",
