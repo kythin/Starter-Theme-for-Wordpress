@@ -158,4 +158,11 @@ function posts_custom_columns($column_name, $id){
     }
 }
 
+function print_d($obj, $suppressOutput=false) {
+    $str = "<pre>".htmlentities(print_r($obj, true))."</pre>";
+    if (!$suppressOutput) echo $str;
+    return $str;
+}
+
+
 ?>
