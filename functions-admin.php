@@ -20,6 +20,16 @@ array(    "name" => "Welcome Message",
 
 array(    "type" => "open"),
 
+
+
+array(  "name" => "Google Analytics UID",
+        "desc" => "Enter the UA id for your analytics account",
+        "id" => "OPTION_gacode",
+        "std" => "",
+        "type" => "text"),
+
+
+
 array(  "name" => "Title",
         "desc" => "Enter a title to display for your welcome message.",
         "id" => $shortname."_welcome_title",
