@@ -1,5 +1,15 @@
 <?php
-define('GOOGLE_ANALYTICS', ''); //if you want to put your GA code in here, it will insert google analytics in the header. Leave blank to disable.
+
+//Get the theme options
+global $options;
+foreach ($options as $value) {
+	if (get_settings( $value['id'] ) === FALSE) { 
+		define($value['id'],$value['std']);
+	} else { 
+		define($value['id'],get_settings( $value['id'] )); 
+	}
+}
+
 
 include_once('functions-admin.php');
 
@@ -77,13 +87,13 @@ function mytheme_head() {
 	
 	
 	//If you've set the analytics variable at the top of this file, add the tracking code.
-	if (GOOGLE_ANALYTICS != '') {
+	if (OPTION_gacode != '') {
 		?>
 	
     	<script type="text/javascript">
 
 		  var _gaq = _gaq || [];
-		  _gaq.push(['_setAccount', '<?=GOOGLE_ANALYTICS?>']);
+		  _gaq.push(['_setAccount', '<?=OPTION_gacode?>']);
 		  _gaq.push(['_trackPageview']);
 		
 		  (function() {
