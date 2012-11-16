@@ -2,11 +2,13 @@
 
 //Get the theme options
 global $options;
-foreach ($options as $value) {
-	if (get_settings( $value['id'] ) === FALSE) { 
-		define($value['id'],$value['std']);
-	} else { 
-		define($value['id'],get_settings( $value['id'] )); 
+if (is_array($options)) {
+	foreach ($options as $value) {
+		if (get_settings( $value['id'] ) === FALSE) { 
+			define($value['id'],$value['std']);
+		} else { 
+			define($value['id'],get_settings( $value['id'] )); 
+		}
 	}
 }
 
@@ -87,7 +89,7 @@ function mytheme_head() {
 	
 	
 	//If you've set the analytics variable at the top of this file, add the tracking code.
-	if (OPTION_gacode != '') {
+	if (defined('OPTION_gacode') && (OPTION_gacode != '')) {
 		?>
 	
     	<script type="text/javascript">
