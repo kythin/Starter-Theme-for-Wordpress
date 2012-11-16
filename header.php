@@ -38,24 +38,6 @@
         <link href="<?=get_bloginfo('template_directory')?>/css/bootstrap.min.css" rel="stylesheet" />
         <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>" />
 	
-	<?php 
-	
-	//Get the theme options
-	global $options;
-	foreach ($options as $value) {
-		
-		if (get_settings( $value['id'] ) === FALSE) { 
-			define($value['id'],$value['std']);
-		} else { 
-			define($value['id'],get_settings( $value['id'] )); 
-		}
-	} 
-	?>
-	
-
-
-
-
     
 </head>
 <body <?php body_class(); ?>>
