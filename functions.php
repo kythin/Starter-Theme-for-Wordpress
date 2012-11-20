@@ -146,6 +146,41 @@ add_shortcode('they_type_this_in_square_brackets', 'example_shortcode_function_n
 
 
 
+
+
+
+//Hide the various admin sections from anyone but admin or mettro
+add_action('admin_head', 'hide_menus');
+function hide_menus() {
+    global $current_user;
+    get_currentuserinfo();
+ 
+    if(($current_user->user_login != 'admin') && ($current_user->user_login != 'kythin') && 0) { //take out the 0 to enable!
+        ?>
+        <style>
+           #menu-plugins, #menu-comments, #menu-posts, #menu-users, #menu-tools, #menu-settings, #menu-links, #menu-dashboard{
+                display:none;
+           }
+		   
+		   /* Hide all theme, menu and widget stuff but leave the theme options available */
+		   #menu-appearance .wp-submenu ul li:not(:nth-child(4)){
+                display:none;
+           }
+		   
+		   
+		   a.editinline {display:none;}
+		   
+        </style>
+        <?php
+    }
+}
+
+
+
+
+
+
+
 // ------------------------------------------------
 // Some extra functions that are really useful.
 // ------------------------------------------------
@@ -159,6 +194,8 @@ function getCurrentCatID(){
 	
   	return $cat_ID;
 }
+
+
 
 
 
