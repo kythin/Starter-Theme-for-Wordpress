@@ -149,13 +149,13 @@ add_shortcode('they_type_this_in_square_brackets', 'example_shortcode_function_n
 
 
 
-//Hide the various admin sections from anyone but admin or mettro
+//Hide the various admin sections from anyone but admin or some other username
 add_action('admin_head', 'hide_menus');
 function hide_menus() {
     global $current_user;
     get_currentuserinfo();
  
-    if(($current_user->user_login != 'admin') && ($current_user->user_login != 'kythin') && 0) { //take out the 0 to enable!
+    if(($current_user->user_login != 'admin') && ($current_user->user_login != 'another_user_here') && 0) { //take out the 0 to enable!
         ?>
         <style>
            #menu-plugins, #menu-comments, #menu-posts, #menu-users, #menu-tools, #menu-settings, #menu-links, #menu-dashboard{
