@@ -224,5 +224,14 @@ function print_d($obj, $suppressOutput=false) {
     return $str;
 }
 
+function https($str) {
+	
+	if ($_SERVER["HTTPS"]) {
+		$str = str_replace('http://', 'https://', $str);
+	}
+	
+	return $str;
+}
+
 
 ?>
