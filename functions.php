@@ -1,19 +1,21 @@
 <?php
-
-//Get the theme options
+//Get & Set Theme Options
+include_once('functions-admin.php');
 global $options;
 if (is_array($options)) {
 	foreach ($options as $value) {
-		if (get_settings( $value['id'] ) === FALSE) { 
-			define($value['id'],$value['std']);
-		} else { 
-			define($value['id'],get_settings( $value['id'] )); 
+		if ($value['id']) {
+			if (get_settings( $value['id'] ) === FALSE) { 
+				define($value['id'],$value['std']);
+			} else { 
+				define($value['id'] , get_settings( $value['id'] )); 
+			}
 		}
 	}
 }
 
 
-include_once('functions-admin.php');
+
 
 include_once('widgets/example_widget.php');
 
