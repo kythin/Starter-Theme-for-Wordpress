@@ -1,26 +1,10 @@
 <?php
-//Get & Set Theme Options
-include_once('functions-admin.php');
-global $options;
-if (is_array($options)) {
-	foreach ($options as $value) {
-		if ($value['id']) {
-			if (get_settings( $value['id'] ) === FALSE) { 
-				define($value['id'],$value['std']);
-			} else { 
-				define($value['id'] , get_settings( $value['id'] )); 
-			}
-		}
-	}
+
+// enqueue jquery. This is better than including it yourself in the header!
+add_action('template_redirect','custom_theme_files');
+function custom_theme_files() {
+    wp_enqueue_script( 'jquery' );
 }
-
-
-
-
-include_once('widgets/example_widget.php');
-
-
-
 
 
 
