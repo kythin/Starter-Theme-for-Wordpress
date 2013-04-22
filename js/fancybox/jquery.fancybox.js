@@ -1,6 +1,6 @@
 /*!
  * fancyBox - jQuery Plugin
- * version: 2.1.2 (Mon, 15 Oct 2012)
+ * version: 2.1.4 (Thu, 10 Jan 2013)
  * @requires jQuery v1.6 or later
  *
  * Examples at http://fancyapps.com/fancybox/
@@ -18,6 +18,7 @@
 		F = $.fancybox = function () {
 			F.open.apply( this, arguments );
 		},
+		IE =  navigator.userAgent.match(/msie/),
 		didUpdate = null,
 		isTouch	  = document.createTouch !== undefined,
 
@@ -48,7 +49,7 @@
 
 	$.extend(F, {
 		// The current version of fancyBox
-		version: '2.1.2',
+		version: '2.1.4',
 
 		defaults: {
 			padding : 15,
@@ -136,7 +137,7 @@
 			tpl: {
 				wrap     : '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><div class="fancybox-inner"></div></div></div></div>',
 				image    : '<img class="fancybox-image" src="{href}" alt="" />',
-				iframe   : '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen' + ($.browser.msie ? ' allowtransparency="true"' : '') + '></iframe>',
+				iframe   : '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen' + (IE ? ' allowtransparency="true"' : '') + '></iframe>',
 				error    : '<p class="fancybox-error">The requested content cannot be loaded.<br/>Please try again later.</p>',
 				closeBtn : '<a title="Close" class="fancybox-item fancybox-close" href="javascript:;"></a>',
 				next     : '<a title="Next" class="fancybox-nav fancybox-next" href="javascript:;"><span></span></a>',
@@ -376,20 +377,20 @@
 				F.imgPreload.onload = F.imgPreload.onerror = null;
 			}
 
-			// If the first item has been canceled, then clear everything
 			if (coming.wrap) {
-				coming.wrap.stop(true).trigger('onReset').remove();
-			}
-
-			if (!F.current) {
-				F.trigger('afterClose');
+				coming.wrap.stop(true, true).trigger('onReset').remove();
 			}
 
 			F.coming = null;
+
+			// If the first item has been canceled, then clear everything
+			if (!F.current) {
+				F._afterZoomOut( coming );
+			}
 		},
 
 		// Start closing animation if is open; remove immediately if opening/closing
-		close: function (immediately) {
+		close: function (event) {
 			F.cancel();
 
 			if (false === F.trigger('beforeClose')) {
@@ -398,7 +399,11 @@
 
 			F.unbindEvents();
 
-			if (!F.isOpen || immediately === true) {
+			if (!F.isActive) {
+				return;
+			}
+
+			if (!F.isOpen || event === true) {
 				$('.fancybox-wrap').stop(true).trigger('onReset').remove();
 
 				F._afterZoomOut();
@@ -561,7 +566,7 @@
 
 				F.wrap.removeClass('fancybox-tmp');
 
-				if (type !== 'scroll') {
+				if (anyway || type === 'load' || (type === 'resize' && current.autoResize)) {
 					F._setDimension();
 				}
 
@@ -608,6 +613,8 @@
 			// If user will press the escape-button, the request will be canceled
 			D.bind('keydown.loading', function(e) {
 				if ((e.which || e.keyCode) === 27) {
+					e.preventDefault();
+
 					F.cancel();
 				}
 			});
@@ -742,10 +749,6 @@
 
 			if (ret === false) {
 				return false;
-			}
-
-			if (event === 'onCancel' && !F.isOpened) {
-				F.isActive = false;
 			}
 
 			if (obj.helpers) {
@@ -1081,7 +1084,7 @@
 			scrolling = coming.scrolling;
 
 			$.extend(F, {
-				wrap  : current.wrap.removeClass('fancybox-tmp'),
+				wrap  : current.wrap,
 				skin  : current.skin,
 				outer : current.outer,
 				inner : current.inner,
@@ -1199,7 +1202,7 @@
 				body;
 
 			// Reset dimensions so we could re-check actual size
-			wrap.add(skin).add(inner).width('auto').height('auto');
+			wrap.add(skin).add(inner).width('auto').height('auto').removeClass('fancybox-tmp');
 
 			wPadding = getScalar(skin.outerWidth(true)  - skin.width());
 			hPadding = getScalar(skin.outerHeight(true) - skin.height());
@@ -1425,12 +1428,14 @@
 
 			F.wrap.css('overflow', 'visible').addClass('fancybox-opened');
 
-			F.reposition();
+			F.update();
 
 			// Assign a click event
 			if ( current.closeClick || (current.nextClick && F.group.length > 1) ) {
 				F.inner.css('cursor', 'pointer').bind('click.fb', function(e) {
 					if (!$(e.target).is('a') && !$(e.target).parent().is('a')) {
+						e.preventDefault();
+
 						F[ current.closeClick ? 'close' : 'next' ]();
 					}
 				});
@@ -1438,7 +1443,11 @@
 
 			// Create a close button
 			if (current.closeBtn) {
-				$(current.tpl.closeBtn).appendTo(F.skin).bind('click.fb', F.close);
+				$(current.tpl.closeBtn).appendTo(F.skin).bind('click.fb', function(e) {
+					e.preventDefault();
+
+					F.close();
+				});
 			}
 
 			// Create navigation arrows
@@ -1465,10 +1474,10 @@
 			}
 		},
 
-		_afterZoomOut: function () {
-			var current = F.current;
+		_afterZoomOut: function ( obj ) {
+			obj = obj || F.current;
 
-			$('.fancybox-wrap').stop(true).trigger('onReset').remove();
+			$('.fancybox-wrap').trigger('onReset').remove();
 
 			$.extend(F, {
 				group  : {},
@@ -1485,7 +1494,7 @@
 				inner  : null
 			});
 
-			F.trigger('afterClose', current);
+			F.trigger('afterClose', obj);
 		}
 	});
 
@@ -1648,10 +1657,7 @@
 				F.wrap.css(startPos).animate(endPos, {
 					duration : current.nextSpeed,
 					easing   : current.nextEasing,
-					complete : function() {
-						// This helps FireFox to properly render the box
-						setTimeout(F._afterZoomIn, 20);
-					}
+					complete : F._afterZoomIn
 				});
 			}
 		},
@@ -1687,22 +1693,25 @@
 			speedOut   : 200,   // duration of fadeOut animation
 			showEarly  : true,  // indicates if should be opened immediately or wait until the content is ready
 			css        : {},    // custom CSS properties
-			locked     : true   // if true, the content will be locked into overlay
+			locked     : !isTouch,  // if true, the content will be locked into overlay
+			fixed      : true   // if false, the overlay CSS position property will not be set to "fixed"
 		},
 
-		overlay : null,
-		fixed   : false,
+		overlay : null,   // current handle
+		fixed   : false,  // indicates if the overlay has position "fixed"
 
 		// Public methods
-		create : function() {
+		create : function(opts) {
+			opts = $.extend({}, this.defaults, opts);
+
 			if (this.overlay) {
 				this.close();
 			}
 
-			this.overlay = $('<div class="fancybox-overlay"></div>').appendTo( this.el || 'body' );
+			this.overlay = $('<div class="fancybox-overlay"></div>').appendTo( 'body' );
 			this.fixed   = false;
 
-			if (F.defaults.fixed && !isTouch) {
+			if (opts.fixed && F.defaults.fixed) {
 				this.overlay.addClass('fancybox-overlay-fixed');
 
 				this.fixed = true;
@@ -1718,7 +1727,7 @@
 				this.overlay.unbind('.overlay').width('auto').height('auto');
 
 			} else {
-				this.create();
+				this.create(opts);
 			}
 
 			if (!this.fixed) {
@@ -1748,6 +1757,16 @@
 			W.unbind('resize.overlay');
 
 			this.overlay = null;
+
+			if (this.margin !== false) {
+				$('body').css('margin-right', this.margin);
+
+				this.margin = false;
+			}
+
+			if (this.el) {
+				this.el.removeClass('fancybox-lock');
+			}
 		},
 
 		// Private, callbacks
@@ -1759,7 +1778,7 @@
 			this.overlay.width(width).height('100%');
 
 			// jQuery does not return reliable result for IE
-			if ($.browser.msie) {
+			if (IE) {
 				offsetWidth = Math.max(document.documentElement.offsetWidth, document.body.offsetWidth);
 
 				if (D.width() > offsetWidth) {
@@ -1781,7 +1800,7 @@
 				this.margin = D.height() > W.height() || $('body').css('overflow-y') === 'scroll' ? $('body').css('margin-right') : false;
 				this.el     = document.all && !document.querySelector ? $('html') : $('body');
 
-				this.create();
+				this.create(opts);
 			}
 
 			if (opts.locked && this.fixed) {
@@ -1813,21 +1832,10 @@
 		},
 
 		afterClose: function (opts) {
-			var that  = this,
-				speed = opts.speedOut;
-
 			// Remove overlay if exists and fancyBox is not opening
 			// (e.g., it is not being open using afterClose callback)
-			if (that.overlay && !F.isActive) {
-				that.overlay.fadeOut(speed || 0, function () {
-					if (that.margin !== false) {
-						$('body').css('margin-right', that.margin);
-					}
-
-					that.el.removeClass('fancybox-lock');
-
-					that.close();
-				});
+			if (this.overlay && !F.isActive) {
+				this.overlay.fadeOut(opts.speedOut, $.proxy( this.close, this ));
 			}
 		}
 	};
@@ -1877,7 +1885,7 @@
 
 					title.appendTo('body');
 
-					if ($.browser.msie) {
+					if (IE) {
 						title.width( title.width() );
 					}
 
@@ -1929,9 +1937,12 @@
 
 		if (!selector || options.live === false) {
 			that.unbind('click.fb-start').bind('click.fb-start', run);
+
 		} else {
 			D.undelegate(selector, 'click.fb-start').delegate(selector + ":not('.fancybox-item, .fancybox-nav')", 'click.fb-start', run);
 		}
+
+		this.filter('[data-fancybox-start=1]').trigger('click');
 
 		return this;
 	};
