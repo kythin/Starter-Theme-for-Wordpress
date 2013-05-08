@@ -1,13 +1,13 @@
-$(document).ready(function() {
+jQuery(document).ready(function() {
 	
-	//runFancyBox();	
+	runFancyBox();	
 		
 });
 
 
 function runFancyBox() {
 
-	 $("a.fancybox-thumb, a.cboxElement, a.preview_link").fancybox({
+	 jQuery("a.fancybox-thumb, a.cboxElement, a.preview_link").fancybox({
 		prevEffect	: 'none',
 		nextEffect	: 'none',
 		helpers	: {
@@ -23,7 +23,7 @@ function runFancyBox() {
 	
 	
 	
-		$('a.fancybox-media').fancybox({
+		jQuery('a.fancybox-media').fancybox({
 			openEffect  : 'none',
 			closeEffect : 'none',
 			helpers : {
@@ -32,7 +32,7 @@ function runFancyBox() {
 		});
 		
 		
-		$('a.thickbox').fancybox({
+		jQuery('a.thickbox, a.fancybox, a.lightbox, a.litebox').fancybox({
 			openEffect  : 'none',
 			closeEffect : 'none',
 		});
